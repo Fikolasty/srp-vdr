@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#081019" />
+    <meta name="description" content="Guía bilingüe para publicar manualmente un killmail de EVE Online en zKillboard y continuar el proceso de SRP." />
+    <title>Missing Killmail? | zKillboard & SRP Guide</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #081019;
+        --bg-2: #0d1823;
+        --panel: #111e2b;
+        --line: #263946;
+        --text: #f1f7f9;
+        --muted: #9badb9;
+        --cyan: #7ee5db;
+        --cyan-dark: #12383b;
+        --gold: #efc47c;
+        --display: "Arial Narrow", "Roboto Condensed", "Helvetica Neue", Arial, sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Inter, "Segoe UI", Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      body::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 890px;
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 75% 17%, rgba(61, 124, 135, .18), transparent 28%),
+          radial-gradient(circle at 17% 24%, rgba(41, 83, 110, .16), transparent 34%),
+          radial-gradient(circle at 89% 33%, #8dd7e31a 1px, transparent 2px),
+          radial-gradient(circle at 34% 12%, #d7f7ff24 1px, transparent 2px);
+        background-size: auto, auto, 171px 189px, 231px 211px;
+        opacity: .85;
+      }
+      a { color: inherit; }
+      button { font: inherit; }
+      .container { width: min(1160px, calc(100% - 48px)); margin-inline: auto; }
+      .skip-link { position: absolute; z-index: 100; left: 1rem; top: -4rem; background: var(--cyan); color: #061316; padding: .8rem 1rem; border-radius: 8px; }
+      .skip-link:focus { top: 1rem; }
+
+      .site-header { position: relative; z-index: 5; border-bottom: 1px solid #ffffff16; }
+      .header-inner { min-height: 82px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+      .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; font-family: var(--display); font-weight: 850; letter-spacing: .09em; font-size: 15px; }
+      .brand-emblem { width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid #72e6db79; background: #7ee5db0d; transform: rotate(45deg); }
+      .brand-emblem svg { transform: rotate(-45deg); }
+      .brand-dot { color: var(--cyan); }
+      .header-right { display: flex; align-items: center; gap: 20px; }
+      .header-tag { font-size: 10px; color: #91a7b3; letter-spacing: .22em; text-transform: uppercase; white-space: nowrap; font-weight: 750; }
+      .language-switch { display: flex; background: #14232e; border: 1px solid #35515c; border-radius: 999px; padding: 4px; gap: 3px; }
+      .language-switch button { border: 0; color: #a6bbc4; background: transparent; padding: 8px 14px; min-width: 48px; border-radius: 999px; font-size: 12px; letter-spacing: .1em; font-weight: 800; cursor: pointer; transition: .2s; }
+      .language-switch button[aria-pressed="true"] { color: #082025; background: var(--cyan); box-shadow: 0 2px 14px #6fefe336; }
+      .language-switch button:focus-visible, a:focus-visible, .shot-button:focus-visible, .modal-close:focus-visible { outline: 2px solid #e2fff8; outline-offset: 3px; }
+
+      .hero { position: relative; overflow: hidden; padding: 91px 0 74px; border-bottom: 1px solid #ffffff12; }
+      .hero::after { content: ""; position: absolute; height: 1px; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, var(--cyan), transparent); opacity: .35; }
+      .hero-grid { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); gap: 42px; align-items: center; }
+      .eyebrow { display: flex; align-items: center; gap: 12px; color: var(--cyan); font: 800 11px/1.4 var(--display); letter-spacing: .22em; text-transform: uppercase; }
+      .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--cyan); }
+      h1 { margin: 22px 0 19px; max-width: 610px; font: 900 clamp(42px, 5.3vw, 76px)/.99 var(--display); letter-spacing: -.048em; text-transform: uppercase; }
+      h1 em { font-style: normal; color: var(--cyan); }
+      .hero-lede { font-size: clamp(16px, 1.6vw, 19px); line-height: 1.65; color: #b7c7cf; max-width: 510px; margin: 0; }
+      .hero-actions { margin-top: 34px; display: flex; gap: 13px; flex-wrap: wrap; }
+      .btn { display: inline-flex; align-items: center; justify-content: center; gap: 12px; text-decoration: none; min-height: 49px; padding: 0 20px; border-radius: 4px; border: 1px solid transparent; font-size: 12px; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; transition: .2s; }
+      .btn-primary { color: #082021; background: var(--cyan); box-shadow: 0 10px 35px #35c8b91f; }
+      .btn-primary:hover { background: #b3fff6; transform: translateY(-2px); }
+      .btn-outline { border-color: #49616c; color: #d5e4e7; background: #ffffff05; }
+      .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); }
+      .btn svg { flex: 0 0 auto; }
+      .hero-metrics { margin-top: 46px; display: flex; flex-wrap: wrap; align-items: center; gap: 24px; }
+      .hero-metrics span { display: flex; gap: 9px; align-items: center; color: #b1c2ca; font: 700 10px/1.5 var(--display); letter-spacing: .16em; text-transform: uppercase; }
+      .hero-metrics b { color: var(--gold); font-size: 19px; letter-spacing: 0; }
+      .hero-visual { min-width: 0; position: relative; padding: 20px 0 22px 18px; }
+      .hero-visual::before { content: ""; position: absolute; inset: 5% -7% 0 7%; border: 1px solid #48758039; transform: translate(12px, -9px); pointer-events: none; }
+      .hero-visual::after { content: "+"; position: absolute; right: -26px; top: -10px; font-size: 34px; color: var(--cyan); opacity: .6; font-weight: 200; }
+      .visual-frame { background: #111e2a; box-shadow: 0 35px 80px #0007; border: 1px solid #5e929542; position: relative; padding: 7px; }
+      .visual-bar { display: flex; justify-content: space-between; align-items: center; padding: 9px 12px 12px; color: #84a5af; font-size: 10px; font-weight: 750; letter-spacing: .16em; text-transform: uppercase; }
+      .window-dots { display: flex; gap: 5px; }
+      .window-dots i { width: 5px; height: 5px; display: block; border: 1px solid #83b1bc; transform: rotate(45deg); }
+      .hero-image { width: 100%; height: 340px; display: block; object-fit: cover; object-position: 81% 42%; filter: brightness(1.1) contrast(1.07) saturate(.92); }
+      .visual-status { position: absolute; z-index: 1; left: -10px; bottom: -18px; background: #0b1920; border: 1px solid #4d797c; box-shadow: 0 12px 35px #0009; padding: 13px 19px; display: flex; gap: 11px; align-items: center; }
+      .status-pulse { width: 9px; height: 9px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 15px var(--cyan); }
+      .visual-status small { display: block; font-size: 9px; color: #91abb4; letter-spacing: .17em; margin-bottom: 5px; text-transform: uppercase; }
+      .visual-status strong { display: block; font: 800 12px var(--display); letter-spacing: .08em; text-transform: uppercase; color: #eaf6f5; }
+
+      .guide { padding-top: 90px; padding-bottom: 100px; }
+      .section-header { display: flex; align-items: end; justify-content: space-between; gap: 32px; padding-bottom: 27px; border-bottom: 1px solid #2a3e48; margin-bottom: 44px; }
+      .section-kicker { color: var(--gold); font: 800 11px var(--display); text-transform: uppercase; letter-spacing: .19em; margin: 0 0 12px; }
+      .section-header h2 { margin: 0; font: 900 clamp(32px, 4vw, 48px)/1.04 var(--display); text-transform: uppercase; letter-spacing: -.035em; }
+      .section-aside { color: #8ca4ae; font-size: 12px; line-height: 1.7; max-width: 240px; text-align: right; margin: 0; }
+      .step-section { display: grid; grid-template-columns: minmax(230px, .72fr) minmax(0, 1.28fr); gap: 72px; align-items: center; margin-top: 70px; }
+      .step-section.first { margin-top: 0; }
+      .step-section.reverse { grid-template-columns: minmax(0, 1.24fr) minmax(250px, .76fr); }
+      .step-copy { position: relative; }
+      .step-index { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; font: 800 12px var(--display); letter-spacing: .18em; color: var(--cyan); text-transform: uppercase; }
+      .step-index .number { font: 900 58px/.9 var(--display); color: #d7faf5; letter-spacing: -.06em; }
+      .step-index .slash { color: #52727b; font-size: 22px; font-weight: 400; }
+      .step-copy h3 { font: 900 clamp(27px, 3vw, 39px)/1.1 var(--display); text-transform: uppercase; letter-spacing: -.035em; margin: 0 0 16px; }
+      .step-copy p { color: #aebfca; font-size: 16px; line-height: 1.7; max-width: 390px; margin: 0; }
+      .step-copy strong { color: #effefa; }
+      .step-copy .micro { margin-top: 24px; color: var(--gold); font: 800 10px var(--display); letter-spacing: .19em; text-transform: uppercase; }
+      .image-card { position: relative; min-width: 0; }
+      .image-card::before { content: ""; position: absolute; inset: 8px -10px -10px 9px; border: 1px solid #49687560; z-index: 0; }
+      .shot-button { appearance: none; border: 1px solid #375363; display: block; width: 100%; padding: 0; text-align: left; cursor: zoom-in; position: relative; z-index: 1; background: #0f1b26; box-shadow: 0 25px 50px #0006; overflow: hidden; }
+      .shot-button img { display: block; width: 100%; height: auto; filter: brightness(1.17) contrast(1.08) saturate(1.05); transition: transform .35s, filter .35s; }
+      .shot-button:hover img { transform: scale(1.015); filter: brightness(1.24) contrast(1.1) saturate(1.08); }
+      .image-card .image-footer { z-index: 2; position: relative; background: #111f2b; border: 1px solid #375363; border-top: 0; min-height: 43px; display: flex; gap: 15px; justify-content: space-between; align-items: center; padding: 9px 15px; color: #a8bdc6; font: 750 10px/1.4 var(--display); text-transform: uppercase; letter-spacing: .12em; }
+      .image-footer span:last-child { color: var(--cyan); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+      .image-footer svg { width: 14px; height: 14px; }
+      .step-pair { border-left: 1px solid #3e6068; padding-left: 25px; }
+      .step-pair .step-copy + .step-copy { margin-top: 40px; padding-top: 37px; border-top: 1px solid #2b424d; }
+      .step-pair .step-index { margin-bottom: 12px; }
+      .step-pair .step-index .number { font-size: 47px; }
+      .step-pair .step-copy h3 { font-size: clamp(25px, 2.65vw, 34px); margin-bottom: 11px; }
+      .step-pair .step-copy p { font-size: 15px; line-height: 1.6; }
+      .highlight-command { display: inline-block; color: var(--cyan); padding: 6px 9px; background: #153536; border: 1px solid #4d8280; font: 800 12px var(--display); letter-spacing: .025em; margin-top: 14px; }
+      .target-link { margin-top: 25px; display: inline-flex; gap: 9px; align-items: center; font-weight: 800; text-decoration: none; color: var(--cyan); border-bottom: 1px solid #4da9a4; padding-bottom: 5px; overflow-wrap: anywhere; }
+      .target-link:hover { color: white; }
+
+      .finish { margin-top: 84px; background: linear-gradient(105deg, #123438, #10222b 65%, #1b2b31); border: 1px solid #497e7a; position: relative; overflow: hidden; padding: clamp(28px, 5vw, 54px); display: flex; gap: 35px; align-items: center; justify-content: space-between; }
+      .finish::before { content: "05"; font: 900 190px/.75 var(--display); position: absolute; right: 27%; bottom: -35px; color: #9ff8de0a; pointer-events: none; }
+      .finish-main { position: relative; display: flex; align-items: flex-start; gap: 24px; max-width: 720px; }
+      .finish-icon { width: 58px; height: 58px; border: 1px solid #8feee1; flex-shrink: 0; display: grid; place-items: center; color: var(--cyan); }
+      .finish-kicker { margin: 2px 0 10px; color: var(--gold); font: 800 11px var(--display); letter-spacing: .2em; text-transform: uppercase; }
+      .finish h3 { margin: 0 0 10px; text-transform: uppercase; font: 900 clamp(29px, 3vw, 42px)/1.05 var(--display); letter-spacing: -.035em; }
+      .finish p { margin: 0; color: #bbd0d3; font-size: 15px; line-height: 1.65; }
+      .finish .btn { position: relative; flex-shrink: 0; }
+      .note { color: #859fa9; text-align: center; line-height: 1.6; font-size: 12px; padding: 24px 0 0; }
+      .footer { border-top: 1px solid #263943; color: #8098a5; }
+      .footer-inner { padding: 24px 0 31px; display: flex; justify-content: space-between; gap: 20px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+      .footer a { color: var(--cyan); text-decoration: none; }
+
+      .lightbox { padding: 0; border: 1px solid #648f97; background: #08131a; color: #e5f5f2; box-shadow: 0 30px 110px #000d; width: min(96vw, 1500px); max-height: 94vh; }
+      .lightbox::backdrop { background: #010609e8; backdrop-filter: blur(8px); }
+      .lightbox-inner { display: grid; grid-template-rows: auto minmax(0, 1fr); max-height: 94vh; }
+      .lightbox-head { min-height: 51px; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 8px 15px 8px 22px; border-bottom: 1px solid #264650; font: 800 11px var(--display); letter-spacing: .13em; text-transform: uppercase; }
+      .modal-close { border: 1px solid #52737b; background: #1c3038; color: #d7f5f1; border-radius: 3px; width: 35px; height: 35px; cursor: pointer; font-size: 23px; line-height: 1; }
+      .lightbox img { display: block; max-width: 100%; max-height: calc(94vh - 53px); object-fit: contain; margin: auto; filter: brightness(1.13) contrast(1.07); }
+
+      @media (max-width: 950px) {
+        .hero-grid { grid-template-columns: 1fr; }
+        .hero { padding: 68px 0 62px; }
+        .hero-copy { max-width: 760px; }
+        .hero-visual { max-width: 720px; width: 100%; padding-right: 14px; margin: 0 auto; }
+        .hero-image { height: 360px; }
+        .step-section, .step-section.reverse { grid-template-columns: 1fr; gap: 26px; margin-top: 64px; }
+        .step-section.reverse .image-card { order: 2; }
+        .step-section.reverse .step-pair { order: 1; }
+        .step-copy p { max-width: 700px; }
+        .step-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+        .step-pair .step-copy + .step-copy { margin: 0; padding: 0; border: 0; }
+        .finish { align-items: flex-start; flex-direction: column; }
+      }
+      @media (max-width: 620px) {
+        .container { width: min(100% - 32px, 1160px); }
+        .header-inner { min-height: 72px; }
+        .brand { font-size: 12px; letter-spacing: .05em; }
+        .brand-emblem { width: 30px; height: 30px; }
+        .brand-emblem svg { width: 17px; height: 17px; }
+        .header-tag { display: none; }
+        .language-switch button { min-width: 40px; padding: 7px 10px; }
+        .hero { padding-top: 51px; }
+        h1 { font-size: clamp(39px, 10.4vw, 58px); }
+        .hero-metrics { gap: 10px 17px; margin-top: 30px; }
+        .hero-metrics b { font-size: 17px; }
+        .hero-visual { padding: 9px 8px 20px 9px; }
+        .hero-image { height: 235px; }
+        .visual-status { left: 0; bottom: -7px; padding: 10px 13px; }
+        .guide { padding: 63px 0 65px; }
+        .section-header { margin-bottom: 31px; align-items: start; }
+        .section-aside { display: none; }
+        .step-index .number { font-size: 49px; }
+        .step-pair { display: block; }
+        .step-pair .step-copy + .step-copy { margin-top: 30px; padding-top: 28px; border-top: 1px solid #2b424d; }
+        .image-footer { font-size: 9px !important; }
+        .finish-main { gap: 17px; }
+        .finish-icon { width: 43px; height: 43px; }
+        .finish-icon svg { width: 23px; }
+        .footer-inner { flex-direction: column; gap: 8px; }
+      }
+      @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; } }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#guide" data-i18n="skip">Saltar a los pasos</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="#top" aria-label="EVE Online — zKillboard Guide">
+          <span class="brand-emblem" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2 21 12 12 22 3 12 12 2Z" stroke="#7ee5db" stroke-width="1.4"/><path d="M12 7v10M7 12h10" stroke="#7ee5db" stroke-width="1.4"/></svg></span>
+          <span>EVE <span class="brand-dot">/</span> zKILLBOARD</span>
+        </a>
+        <div class="header-right">
+          <span class="header-tag" data-i18n="fieldGuide">GUÍA DE CAMPO · SRP</span>
+          <div class="language-switch" role="group" aria-label="Language / Idioma">
+            <button type="button" id="lang-es" aria-pressed="true" lang="es">ES</button>
+            <button type="button" id="lang-en" aria-pressed="false" lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <div class="eyebrow" data-i18n="eyebrow">EVE ONLINE / RECUPERAR KILLMAIL</div>
+            <h1 id="hero-title"><span data-i18n="heroTitleA">¿TU KILL NO APARECE EN</span> <em>zKILLBOARD?</em></h1>
+            <p class="hero-lede" data-i18n="heroLede">Si tu killmail no aparece en zKillboard, puedes publicarlo manualmente desde EVE Online y luego continuar con tu solicitud de SRP.</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#guide"><span data-i18n="seeSteps">VER LOS PASOS</span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a>
+              <a class="btn btn-outline" href="https://zkillboard.com/post/" target="_blank" rel="noopener noreferrer"><span data-i18n="openZkill">ABRIR zKILLBOARD</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6M10 14 20 4"/><path d="M20 13v6H4V4h7"/></svg></a>
+            </div>
+            <div class="hero-metrics" aria-label="Guide overview">
+              <span><b>05</b> <span data-i18n="stepsMetric">PASOS</span></span>
+              <span><b>03</b> <span data-i18n="imagesMetric">CAPTURAS</span></span>
+              <span><b>ES / EN</b> <span data-i18n="langsMetric">IDIOMAS</span></span>
+            </div>
+          </div>
+          <div class="hero-visual" aria-hidden="true">
+            <div class="visual-frame">
+              <div class="visual-bar"><span>EVE ONLINE // KILL REPORT</span><span class="window-dots"><i></i><i></i><i></i></span></div>
+              <img class="hero-image" src="assets/01-notifications.png" alt="" />
+            </div>
+            <div class="visual-status"><i class="status-pulse"></i><div><small data-i18n="missionLabel">OBJETIVO</small><strong data-i18n="missionValue">PUBLICAR KILLMAIL</strong></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="guide container" id="guide" aria-labelledby="guide-title">
+        <div class="section-header">
+          <div><p class="section-kicker" data-i18n="walkthrough">GUÍA PASO A PASO</p><h2 id="guide-title" data-i18n="guideTitle">DEL JUEGO A zKILLBOARD</h2></div>
+          <p class="section-aside" data-i18n="guideAside">Sigue el recorrido en orden. Haz clic en las capturas para ampliarlas.</p>
+        </div>
+
+        <div class="step-section first">
+          <div class="step-copy">
+            <div class="step-index"><span class="number">01</span><span class="slash">/</span><span data-i18n="inGame">EN EL JUEGO</span></div>
+            <h3 data-i18n="step1Title">ABRE LAS NOTIFICACIONES</h3>
+            <p data-i18n="step1Body">Abre el historial de notificaciones de EVE Online. Busca la notificación de tu <strong>Kill Report</strong> y ábrela.</p>
+            <div class="micro" data-i18n="step1Hint">NOTIFICATION HISTORY → KILL REPORT</div>
+          </div>
+          <div class="image-card">
+            <button class="shot-button" type="button" data-image="assets/01-notifications.png" data-caption-key="img1Caption" aria-label="Ampliar captura de notificaciones"><img src="assets/01-notifications.png" loading="lazy" alt="Historial de notificaciones y ventana del Kill Report en EVE Online" data-alt-es="Historial de notificaciones y ventana del Kill Report en EVE Online" data-alt-en="Notification History and Kill Report window in EVE Online" /></button>
+            <div class="image-footer"><span data-i18n="img1Caption">01 / HISTORIAL DE NOTIFICACIONES</span><span><span data-i18n="enlarge">AMPLIAR</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 4H4v5m11 11h5v-5M4 4l6 6m10 10-6-6"/></svg></span></div>
+          </div>
+        </div>
+
+        <div class="step-section reverse">
+          <div class="image-card">
+            <button class="shot-button" type="button" data-image="assets/02-copy-external-link.png" data-caption-key="img2Caption" aria-label="Ampliar captura del menú"><img src="assets/02-copy-external-link.png" loading="lazy" alt="Menú del Kill Report con Copy External Kill Link marcado en rojo" data-alt-es="Menú del Kill Report con Copy External Kill Link marcado en rojo" data-alt-en="Kill Report menu with Copy External Kill Link circled in red" /></button>
+            <div class="image-footer"><span data-i18n="img2Caption">02–03 / MENÚ DEL KILL REPORT</span><span><span data-i18n="enlarge">AMPLIAR</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 4H4v5m11 11h5v-5M4 4l6 6m10 10-6-6"/></svg></span></div>
+          </div>
+          <div class="step-pair">
+            <div class="step-copy">
+              <div class="step-index"><span class="number">02</span><span class="slash">/</span><span data-i18n="killReport">KILL REPORT</span></div>
+              <h3 data-i18n="step2Title">ABRE EL MENÚ</h3>
+              <p data-i18n="step2Body">Con el reporte abierto, haz clic en los <strong>tres puntos (⋮)</strong> de la esquina superior derecha.</p>
+            </div>
+            <div class="step-copy">
+              <div class="step-index"><span class="number">03</span><span class="slash">/</span><span data-i18n="copyLink">COPIAR ENLACE</span></div>
+              <h3 data-i18n="step3Title">COPIA EL ENLACE EXTERNO</h3>
+              <p data-i18n="step3Body">En el menú, selecciona esta opción para copiar el enlace del killmail:</p>
+              <span class="highlight-command">Copy External Kill Link</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-section">
+          <div class="step-copy">
+            <div class="step-index"><span class="number">04</span><span class="slash">/</span><span>zKILLBOARD</span></div>
+            <h3 data-i18n="step4Title">PEGA Y ENVÍA EL ENLACE</h3>
+            <p data-i18n="step4Body">Visita <strong>zkillboard.com/post/</strong>, pega el enlace en el campo <strong>External Killmail Link</strong> y pulsa <strong>Submit</strong>.</p>
+            <a class="target-link" href="https://zkillboard.com/post/" target="_blank" rel="noopener noreferrer">zkillboard.com/post/ <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6M10 14 20 4"/><path d="M20 13v6H4V4h7"/></svg></a>
+          </div>
+          <div class="image-card">
+            <button class="shot-button" type="button" data-image="assets/03-zkillboard-post.png" data-caption-key="img3Caption" aria-label="Ampliar captura de zKillboard"><img src="assets/03-zkillboard-post.png" loading="lazy" alt="Página de zKillboard para pegar el enlace externo y enviarlo" data-alt-es="Página de zKillboard para pegar el enlace externo y enviarlo" data-alt-en="zKillboard's external killmail submission page" /></button>
+            <div class="image-footer"><span data-i18n="img3Caption">04 / POST EXTERNAL KILLMAIL LINK</span><span><span data-i18n="enlarge">AMPLIAR</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 4H4v5m11 11h5v-5M4 4l6 6m10 10-6-6"/></svg></span></div>
+          </div>
+        </div>
+
+        <div class="finish" id="srp">
+          <div class="finish-main">
+            <div class="finish-icon" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 12.5 9 17l11-11"/><circle cx="12" cy="12" r="10" stroke-dasharray="2 4"/></svg></div>
+            <div><p class="finish-kicker" data-i18n="step5Kicker">05 / ÚLTIMO PASO</p><h3 data-i18n="step5Title">CONTINÚA CON TU SRP EN EL AUTH</h3><p data-i18n="step5Body">Cuando el killmail aparezca en zKillboard, copia la URL de ese kill y continúa tu solicitud de SRP en el AUTH de Sigma Grindset.</p></div>
+          </div>
+          <a href="https://auth2.sigmagrindset.net/ship-replacement/" class="btn btn-primary" target="_blank" rel="noopener noreferrer"><span data-i18n="viewAuth">ABRIR AUTH DE SRP</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6M10 14 20 4"/><path d="M20 13v6H4V4h7"/></svg></a>
+        </div>
+        <p class="note" data-i18n="footerNote">Esta guía muestra cómo publicar un killmail faltante. El proceso de SRP depende de las instrucciones de tu corporación o alianza.</p>
+      </section>
+    </main>
+
+    <footer class="footer"><div class="container footer-inner"><span>EVE ONLINE / zKILLBOARD / SRP</span><span data-i18n="footerCredit">GUÍA VISUAL · ESPAÑOL / ENGLISH</span></div></footer>
+
+    <dialog id="lightbox" class="lightbox" aria-labelledby="modal-title"><div class="lightbox-inner"><div class="lightbox-head"><span id="modal-title"></span><button type="button" class="modal-close" aria-label="Cerrar / Close">×</button></div><img id="modal-image" alt="" /></div></dialog>
+
+    <script>
+      const copy = {
+        es: {
+          skip: 'Saltar a los pasos', fieldGuide: 'GUÍA DE CAMPO · SRP', eyebrow: 'EVE ONLINE / RECUPERAR KILLMAIL',
+          heroTitleA: '¿TU KILL NO APARECE EN', heroLede: 'Si tu killmail no aparece en zKillboard, puedes publicarlo manualmente desde EVE Online y luego continuar con tu solicitud de SRP.',
+          seeSteps: 'VER LOS PASOS', openZkill: 'ABRIR zKILLBOARD', stepsMetric: 'PASOS', imagesMetric: 'CAPTURAS', langsMetric: 'IDIOMAS',
+          missionLabel: 'OBJETIVO', missionValue: 'PUBLICAR KILLMAIL', walkthrough: 'GUÍA PASO A PASO', guideTitle: 'DEL JUEGO A zKILLBOARD',
+          guideAside: 'Sigue el recorrido en orden. Haz clic en las capturas para ampliarlas.', inGame: 'EN EL JUEGO',
+          step1Title: 'ABRE LAS NOTIFICACIONES', step1Body: 'Abre el historial de notificaciones de EVE Online. Busca la notificación de tu <strong>Kill Report</strong> y ábrela.',
+          step1Hint: 'NOTIFICATION HISTORY → KILL REPORT', img1Caption: '01 / HISTORIAL DE NOTIFICACIONES', enlarge: 'AMPLIAR',
+          killReport: 'KILL REPORT', step2Title: 'ABRE EL MENÚ', step2Body: 'Con el reporte abierto, haz clic en los <strong>tres puntos (⋮)</strong> de la esquina superior derecha.',
+          copyLink: 'COPIAR ENLACE', step3Title: 'COPIA EL ENLACE EXTERNO', step3Body: 'En el menú, selecciona esta opción para copiar el enlace del killmail:',
+          img2Caption: '02–03 / MENÚ DEL KILL REPORT', step4Title: 'PEGA Y ENVÍA EL ENLACE',
+          step4Body: 'Visita <strong>zkillboard.com/post/</strong>, pega el enlace en el campo <strong>External Killmail Link</strong> y pulsa <strong>Submit</strong>.',
+          img3Caption: '04 / POST EXTERNAL KILLMAIL LINK', step5Kicker: '05 / ÚLTIMO PASO', step5Title: 'CONTINÚA CON TU SRP EN EL AUTH',
+          step5Body: 'Cuando el killmail aparezca en zKillboard, copia la URL de ese kill y continúa tu solicitud de SRP en el AUTH de Sigma Grindset.',
+          viewAuth: 'ABRIR AUTH DE SRP', footerNote: 'El enlace externo se usa para publicar el killmail; la URL de zKillboard se usa después en el AUTH de SRP.',
+          footerCredit: 'GUÍA VISUAL · ESPAÑOL / ENGLISH'
+        },
+        en: {
+          skip: 'Skip to the steps', fieldGuide: 'FIELD GUIDE · SRP', eyebrow: 'EVE ONLINE / KILLMAIL RECOVERY',
+          heroTitleA: 'KILL NOT SHOWING ON', heroLede: 'If your killmail is missing from zKillboard, you can submit it manually from EVE Online and then continue your SRP request.',
+          seeSteps: 'VIEW THE STEPS', openZkill: 'OPEN zKILLBOARD', stepsMetric: 'STEPS', imagesMetric: 'SCREENSHOTS', langsMetric: 'LANGUAGES',
+          missionLabel: 'OBJECTIVE', missionValue: 'POST THE KILLMAIL', walkthrough: 'STEP-BY-STEP GUIDE', guideTitle: 'FROM THE GAME TO zKILLBOARD',
+          guideAside: 'Follow the steps in order. Click any screenshot to enlarge it.', inGame: 'IN GAME',
+          step1Title: 'OPEN NOTIFICATIONS', step1Body: 'Open the EVE Online notification history. Find the notification for your <strong>Kill Report</strong> and open it.',
+          step1Hint: 'NOTIFICATION HISTORY → KILL REPORT', img1Caption: '01 / NOTIFICATION HISTORY', enlarge: 'ENLARGE',
+          killReport: 'KILL REPORT', step2Title: 'OPEN THE MENU', step2Body: 'With the report open, click the <strong>three dots (⋮)</strong> in the upper-right corner.',
+          copyLink: 'COPY LINK', step3Title: 'COPY THE EXTERNAL LINK', step3Body: 'Select this menu option to copy the killmail link:',
+          img2Caption: '02–03 / KILL REPORT MENU', step4Title: 'PASTE AND SUBMIT THE LINK',
+          step4Body: 'Visit <strong>zkillboard.com/post/</strong>, paste the link into the <strong>External Killmail Link</strong> field, and click <strong>Submit</strong>.',
+          img3Caption: '04 / POST EXTERNAL KILLMAIL LINK', step5Kicker: '05 / FINAL STEP', step5Title: 'CONTINUE YOUR SRP IN AUTH',
+          step5Body: 'Once the killmail appears on zKillboard, copy that kill page URL and continue your SRP request in the Sigma Grindset AUTH.',
+          viewAuth: 'OPEN SRP AUTH', footerNote: 'Use the external link to post the killmail; then use the zKillboard kill URL in the SRP AUTH.',
+          footerCredit: 'VISUAL GUIDE · ENGLISH / ESPAÑOL'
+        }
+      };
+
+      let currentLang = 'es';
+      try { currentLang = localStorage.getItem('zkill-guide-lang') === 'en' ? 'en' : 'es'; } catch (_) {}
+      const langButtons = { es: document.getElementById('lang-es'), en: document.getElementById('lang-en') };
+      const lightbox = document.getElementById('lightbox');
+      const modalImage = document.getElementById('modal-image');
+      const modalTitle = document.getElementById('modal-title');
+
+      function setLanguage(lang) {
+        currentLang = lang;
+        document.documentElement.lang = lang;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const value = copy[lang][el.dataset.i18n];
+          if (value !== undefined) el.innerHTML = value;
+        });
+        document.querySelectorAll('[data-alt-es]').forEach(img => { img.alt = img.dataset['alt' + lang[0].toUpperCase() + lang.slice(1)] || ''; });
+        langButtons.es.setAttribute('aria-pressed', String(lang === 'es'));
+        langButtons.en.setAttribute('aria-pressed', String(lang === 'en'));
+        document.querySelectorAll('.shot-button').forEach(btn => btn.setAttribute('aria-label', (lang === 'es' ? 'Ampliar imagen: ' : 'Enlarge image: ') + copy[lang][btn.dataset.captionKey]));
+        document.title = lang === 'es' ? '¿Tu kill no aparece? | Guía zKillboard y SRP' : 'Missing Killmail? | zKillboard & SRP Guide';
+        try { localStorage.setItem('zkill-guide-lang', lang); } catch (_) {}
+      }
+      langButtons.es.addEventListener('click', () => setLanguage('es'));
+      langButtons.en.addEventListener('click', () => setLanguage('en'));
+      setLanguage(currentLang);
+
+      document.querySelectorAll('.shot-button').forEach(button => button.addEventListener('click', () => {
+        modalImage.src = button.dataset.image;
+        modalImage.alt = button.querySelector('img').alt;
+        modalTitle.textContent = copy[currentLang][button.dataset.captionKey];
+        if (typeof lightbox.showModal === 'function') lightbox.showModal();
+      }));
+      document.querySelector('.modal-close').addEventListener('click', () => lightbox.close());
+      lightbox.addEventListener('click', event => { if (event.target === lightbox) lightbox.close(); });
+    </script>
+  </body>
+</html>
